@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import logo from "./logo.svg";
-import "./App.css";
-import { request } from "./backend-request";
+import logo from "../../logo.svg";
+import "./index.css";
+import { request } from "../../backend-request";
 
 function App() {
   useEffect(() => {
