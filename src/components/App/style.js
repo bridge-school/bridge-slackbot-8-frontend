@@ -21,7 +21,6 @@ export default createGlobalStyle`
     box-sizing: border-box;
     font-size: 16px;
     line-height: 1.5;
-    background-color: ${theme.bg.wash};
     color: #16171a;
     padding: 0;
     margin: 0;
@@ -47,8 +46,5 @@ export default createGlobalStyle`
   }
   a:hover {
     cursor: pointer;
-  }
-  textarea {
-    resize: none;
   }
 `
