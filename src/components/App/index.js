@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 // import './style.js'
 import { request } from '../../backend-request';
 
-import NewPollPage from '../new-poll-page';
+import NewPollPage from './../New-poll-page/';
 
 function App() {
   useEffect(() => {
