@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const InputGroup = styled.div.attrs({
-  className: `mb4`
+  className: `mb4 mr3`
 })``
 
 export const Input = styled.input.attrs(props => ({
