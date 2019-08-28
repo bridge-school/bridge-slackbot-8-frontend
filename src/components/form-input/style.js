@@ -11,5 +11,5 @@ export const Input = styled.input.attrs(props => ({
 }))``
 
 export const Label = styled.label.attrs({
-  className: `f4 b db mb2`,
+  className: `f4 b db mb2 mid-gray`,
 })``
