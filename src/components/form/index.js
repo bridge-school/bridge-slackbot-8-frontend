@@ -1,14 +1,13 @@
-import React from 'react'
-
+import React, { Component } from 'react'
 import FormInput from '../form-input'
+import FormButton from '../button'
 import { Form, Legend, Fieldset } from './style'
-import FormButton from '../Button'
 
-class PollForm extends React.Component {
+class PollForm extends Component {
   constructor() {
     super()
     this.state = {
-      question: '',
+      question: ''
     }
   }
 
@@ -19,7 +18,8 @@ class PollForm extends React.Component {
   handleSubmit = event => {
     event.preventDefault()
 
-    this.setState({ question: '' }) // clear the field on submit
+    // clear the field on submit
+    this.setState({ question: '' })
   }
 
   render() {

@@ -1,6 +1,5 @@
 import React from 'react'
-import PollForm from '../Form'
-
+import PollForm from './../form'
 import { NewPoll } from './style'
 
 const NewPollPage = () => (

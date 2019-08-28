@@ -2,4 +2,4 @@
 
 export const actions = {
   EXAMPLE_ACTION_TYPE: 'EXAMPLE_ACTION_TYPE'
-};
+}
