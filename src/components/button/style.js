@@ -1,5 +1,5 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
-export const Button = styled.div.attrs({
-    className: `f6 link dim br2 ph3 pv2 mb2 dib white bg-teal`,
-  })``
+export const Button = styled.button.attrs({
+  className: `f4 fw6 pv2 br2 w-30 white bg-animate bg-green hover-bg-black button-reset`,
+})``
