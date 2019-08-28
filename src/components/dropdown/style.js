@@ -1,15 +1,15 @@
 import styled from 'styled-components'
 
 export const Label = styled.label.attrs({
-  className: ``
+  className: `f4 b db mb2 mid-gray`
 })``
 
 export const Select = styled.div.attrs({
-  className: ``
+  className: `mb4`
 })``
 
 export const OptionList = styled.select.attrs({
-  className: ``
+  className: `ba br2 bw1 pa2 mb2 db w-100 f4 b--black-20`
 })``
 
 export const Option = styled.option.attrs({
