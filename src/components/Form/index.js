@@ -1,8 +1,14 @@
-import React from 'react';
-// import { Button } from './style';
-import Button from './../Button'
+import React from 'react'
 
-const Form = () => <form><Button></Button></form>
+import FormInput from '../form-input'
+import { Form } from './style'
+import FormButton from '../Button'
 
+const PollForm = () => (
+  <Form>
+    <FormInput id="question" label="Question" />
+    <FormButton label="Submit Poll" type="submit" />
+  </Form>
+)
 
-export default Form;
+export default PollForm

@@ -1,8 +1,12 @@
-import React from 'react';
-import Form from './../Form';
+import React from 'react'
+import PollForm from '../Form'
 
-// import { NewPoll } from './style'
+import { NewPoll } from './style'
 
-const NewPollPage = () => <div><h1>Here is the new pull page</h1><Form></Form></div> 
+const NewPollPage = () => (
+  <NewPoll>
+    <PollForm />
+  </NewPoll>
+)
 
-export default NewPollPage;
+export default NewPollPage

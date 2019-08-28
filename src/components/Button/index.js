@@ -1,6 +1,6 @@
-import React from 'react';
-// import { Button } from './style';
+import React from 'react'
+import { Button } from './style'
 
-const Button = () => <button>Submit Poll</button>
+const FormButton = ({ label, ...otherProps }) => <Button {...otherProps}>{label}</Button>
 
-export default Button;
+export default FormButton
