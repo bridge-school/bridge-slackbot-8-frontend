@@ -1,27 +1,26 @@
-import React from 'react';
+import React, { Component } from 'react'
+import FormInput from '../form-input'
+import FormButton from '../button'
+import { Form, Legend, Fieldset } from './style'
 
-import FormInput from '../form-input';
-import FormButton from '../button';
-import { Form, Legend, Fieldset } from './style';
-
-class PollForm extends React.Component {
+class PollForm extends Component {
   constructor() {
-    super();
+    super()
     this.state = {
       question: ''
-    };
+    }
   }
 
   handleInputChange = event => {
-    this.setState({ question: event.target.value });
-  };
+    this.setState({ question: event.target.value })
+  }
 
   handleSubmit = event => {
-    event.preventDefault();
+    event.preventDefault()
 
     // clear the field on submit
-    this.setState({ question: '' });
-  };
+    this.setState({ question: '' })
+  }
 
   render() {
     return (
@@ -41,8 +40,8 @@ class PollForm extends React.Component {
           </FormButton>
         </Fieldset>
       </Form>
-    );
+    )
   }
 }
 
-export default PollForm;
+export default PollForm

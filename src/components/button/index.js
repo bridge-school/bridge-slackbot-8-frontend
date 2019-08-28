@@ -1,8 +1,8 @@
-import React from 'react';
-import { Button } from './style';
+import React from 'react'
+import { Button } from './style'
 
-const FormButton = ({ children, ...otherProps }) => (
-  <Button {...otherProps}>{children}</Button>
-);
+const FormButton = ({ children, ...props }) => (
+  <Button {...props}>{children}</Button>
+)
 
-export default FormButton;
+export default FormButton

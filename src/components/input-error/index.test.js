@@ -8,7 +8,9 @@ Enzyme.configure({ adapter: new Adapter() })
 describe('InputError component', () => {
   test('renders', () => {
     const errorMessage = 'Some error for the input'
-    const wrapper = mount(<InputError errorMessage={errorMessage} errorFor="myInput" />)
+    const wrapper = mount(
+      <InputError errorMessage={errorMessage} errorFor="myInput" />
+    )
     expect(wrapper.text()).toEqual(errorMessage)
   })
 })

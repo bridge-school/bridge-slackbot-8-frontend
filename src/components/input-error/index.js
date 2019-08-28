@@ -1,5 +1,4 @@
 import React from 'react'
-
 import { ErrorMessage } from './style'
 
 const InputError = ({ errorMessage, errorFor }) => (
