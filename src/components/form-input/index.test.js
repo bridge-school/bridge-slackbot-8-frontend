@@ -1,5 +1,5 @@
 import React from 'react'
-import Enzyme, { shallow, mount } from 'enzyme'
+import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import FormInput from './index'
 
@@ -12,19 +12,5 @@ describe('FormInput component', () => {
     )
 
     expect(wrapper.exists()).toBe(true)
-  })
-
-  test('renders with error message', () => {
-    const id = 'input'
-    const errorMessage = 'some error'
-    const wrapper = mount(
-      <FormInput
-        id={id}
-        label="label for the input"
-        hasError
-        errorMessage={errorMessage}
-      />
-    )
-    expect(wrapper.exists(`#${id}-error`)).toBe(true)
   })
 })
