@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { request } from '../../backend-request'
+import AppHeader from '../header/'
 import NewPollPage from './../new-poll-page/'
 import './style.js'
 
@@ -10,7 +11,13 @@ function App() {
     }
     fetchData()
   })
-  return <NewPollPage />
+  // decide name
+  return (
+    <div>
+      <AppHeader />
+      <NewPollPage />
+    </div>
+  )
 }
 
 export default App

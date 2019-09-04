@@ -1,8 +1,8 @@
 import React from 'react'
 import { ErrorMessage } from './style'
 
-const InputError = ({ errorMessage, errorFor }) => (
-  <ErrorMessage id={`${errorFor}-error`}>{errorMessage}</ErrorMessage>
+const InputError = ({ errorMessage }) => (
+  <ErrorMessage>{errorMessage}</ErrorMessage>
 )
 
 export default InputError
