@@ -20,7 +20,7 @@ class PollForm extends Component {
 
     this.state = {
       question: '',
-      selected: null,
+      channel: null,
       errors: {
         question: ''
       },
@@ -32,21 +32,16 @@ class PollForm extends Component {
     }
 
     this.handleInputChange = this.handleInputChange.bind(this)
-    this.handleDropdownSelect = this.handleDropdownSelect.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   handleInputChange(event) {
-    const { value } = event.target
+    const { value, id } = event.target
 
     this.setState({
-      question: value,
-      errors: { ...this.state.errors, question: '' }
+      [id]: value,
+      errors: { ...this.state.errors, [id]: '' }
     })
-  }
-
-  handleDropdownSelect(event) {
-    this.setState({ selected: event.target.value })
   }
 
   async handleSubmit(event) {
@@ -84,16 +79,12 @@ class PollForm extends Component {
             onChange={this.handleInputChange}
             required
           />
-          {errors.question.length > 0 && (
-            <InputError errorMessage={errors.question} />
-          )}
-
           <Dropdown
             id="channel"
             label="User Group"
             placeholder="Select a channel"
             value={this.state.selected}
-            onChange={this.handleDropdownSelect}
+            onChange={this.handleInputChange}
           >
             {this.state.options.map((option, index) => (
               <Dropdown.Option key={`option-${index}`} id={option}>
@@ -101,6 +92,9 @@ class PollForm extends Component {
               </Dropdown.Option>
             ))}
           </Dropdown>
+          {errors.question.length > 0 && (
+            <InputError errorMessage={errors.question} />
+          )}
           <FormButton type="submit" onClick={this.handleSubmit}>
             Submit Poll
           </FormButton>
