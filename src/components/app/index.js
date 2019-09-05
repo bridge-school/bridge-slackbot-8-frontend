@@ -12,10 +12,12 @@ function App() {
     fetchData()
   })
   // decide name
-  return <div>
-    <AppHeader />
-    <NewPollPage />
+  return (
+    <div>
+      <AppHeader />
+      <NewPollPage />
     </div>
+  )
 }
 
 export default App

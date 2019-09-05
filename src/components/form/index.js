@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 
 import FormInput from '../form-input'
 import FormButton from '../button'
+import Dropdown from '../dropdown'
 import InputError from '../input-error'
 import { Form, Legend, Fieldset } from './style'
 
@@ -19,9 +20,15 @@ class PollForm extends Component {
 
     this.state = {
       question: '',
+      channel: null,
       errors: {
         question: ''
-      }
+      },
+
+      // Dummy data, this should be replaced once connected to the store and to the Slack API
+      // If needed, we can create a utility function to map the fetched channels to an array
+      // of objects containing option and value pairs
+      options: ['general', 'random', 'toronto']
     }
 
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -29,11 +36,11 @@ class PollForm extends Component {
   }
 
   handleInputChange(event) {
-    const { value } = event.target
+    const { value, id } = event.target
 
     this.setState({
-      question: value,
-      errors: { ...this.state.errors, question: '' }
+      [id]: value,
+      errors: { ...this.state.errors, [id]: '' }
     })
   }
 
@@ -72,6 +79,19 @@ class PollForm extends Component {
             onChange={this.handleInputChange}
             required
           />
+          <Dropdown
+            id="channel"
+            label="User Group"
+            placeholder="Select a channel"
+            value={this.state.selected}
+            onChange={this.handleInputChange}
+          >
+            {this.state.options.map((option, index) => (
+              <Dropdown.Option key={`option-${index}`} id={option}>
+                {option}
+              </Dropdown.Option>
+            ))}
+          </Dropdown>
           {errors.question.length > 0 && (
             <InputError errorMessage={errors.question} />
           )}
