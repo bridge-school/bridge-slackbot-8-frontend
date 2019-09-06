@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { withTranslation } from 'react-i18next'
-import en from '../../translation/en.js'
+
 import FormInput from '../form-input'
 import FormButton from '../button'
 import Dropdown from '../dropdown'
