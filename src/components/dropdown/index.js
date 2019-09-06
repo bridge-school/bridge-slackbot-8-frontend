@@ -7,7 +7,9 @@ const Dropdown = ({ id, label, selected, placeholder, children, ...props }) => (
   <Select {...props}>
     <Label htmlFor={id}>{label}</Label>
     <OptionList id={id}>
-      <Option value={null}>{placeholder}</Option>
+      <Option value="" selected={!props.value} disabled>
+        {placeholder}
+      </Option>
       {children}
     </OptionList>
   </Select>
