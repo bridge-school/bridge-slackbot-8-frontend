@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-
+import { withTranslation } from 'react-i18next'
+import en from '../../translation/en.js'
 import FormInput from '../form-input'
 import FormButton from '../button'
 import Dropdown from '../dropdown'
@@ -48,10 +49,13 @@ class PollForm extends Component {
     event.preventDefault()
 
     const { question, errors } = this.state
+    const { t } = this.props
+
+    const questionError = t('Question is required')
 
     await (question.length === 0 &&
       this.setState({
-        errors: { ...errors, question: 'Question is required' }
+        errors: { ...errors, question: questionError }
       }))
 
     try {
@@ -66,6 +70,7 @@ class PollForm extends Component {
   }
 
   render() {
+    const { t } = this.props
     const { question, errors } = this.state
     return (
       <Form onSubmit={this.handleSubmit} noValidate>
@@ -74,15 +79,15 @@ class PollForm extends Component {
           <FormInput
             id="question"
             name="question"
-            label="Question"
+            label={t('Question')}
             value={question}
             onChange={this.handleInputChange}
             required
           />
           <Dropdown
             id="channel"
-            label="User Group"
-            placeholder="Select a channel"
+            label={t('User Group')}
+            placeholder={t('Select a channel')}
             value={this.state.selected}
             onChange={this.handleInputChange}
           >
@@ -104,4 +109,4 @@ class PollForm extends Component {
   }
 }
 
-export default PollForm
+export default withTranslation()(PollForm)
