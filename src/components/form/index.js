@@ -14,6 +14,12 @@ const validateForm = errors => {
   return valid
 }
 
+const nullCheck = fields =>
+  Object.entries(fields).reduce(
+    (acc, [key, value]) => (!value ? [...acc, `${key} is required`] : acc),
+    []
+  )
+
 class PollForm extends Component {
   constructor() {
     super()
@@ -21,14 +27,11 @@ class PollForm extends Component {
     this.state = {
       question: '',
       channel: null,
-      errors: {
-        question: ''
-      },
-
       // Dummy data, this should be replaced once connected to the store and to the Slack API
       // If needed, we can create a utility function to map the fetched channels to an array
       // of objects containing option and value pairs
-      options: ['general', 'random', 'toronto']
+      options: ['general', 'random', 'toronto'],
+      errors: []
     }
 
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -40,33 +43,29 @@ class PollForm extends Component {
 
     this.setState({
       [id]: value,
-      errors: { ...this.state.errors, [id]: '' }
+      errors: []
     })
   }
 
   async handleSubmit(event) {
     event.preventDefault()
 
-    const { question, errors } = this.state
-
-    await (question.length === 0 &&
-      this.setState({
-        errors: { ...errors, question: 'Question is required' }
-      }))
+    const { question, channel } = this.state
+    const errors = await nullCheck({ question, channel })
 
     try {
-      validateForm(this.state.errors)
-        ? console.log('form valid')
-        : console.log('form invalid')
-      // clear the field on submit
-      this.setState({ question: '' })
+      validateForm(errors)
+        ? // if no errors, do something then clear the field on submit
+          this.setState({ question: '', channel: null })
+        : // if errors, set errors in state for re-render
+          this.setState({ errors })
     } catch (error) {
       console.log(error)
     }
   }
 
   render() {
-    const { question, errors } = this.state
+    const { question, channel, options, errors } = this.state
     return (
       <Form onSubmit={this.handleSubmit} noValidate>
         <Fieldset>
@@ -83,18 +82,19 @@ class PollForm extends Component {
             id="channel"
             label="User Group"
             placeholder="Select a channel"
-            value={this.state.selected}
+            value={channel}
             onChange={this.handleInputChange}
           >
-            {this.state.options.map((option, index) => (
+            {options.map((option, index) => (
               <Dropdown.Option key={`option-${index}`} id={option}>
                 {option}
               </Dropdown.Option>
             ))}
           </Dropdown>
-          {errors.question.length > 0 && (
-            <InputError errorMessage={errors.question} />
-          )}
+          {errors &&
+            errors.map((error, i) => (
+              <InputError key={`error-${i}`} errorMessage={error} />
+            ))}
           <FormButton type="submit" onClick={this.handleSubmit}>
             Submit Poll
           </FormButton>
