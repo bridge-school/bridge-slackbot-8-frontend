@@ -2,13 +2,13 @@ import React, { useEffect } from 'react'
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { request } from '../../backend-request'
-import { setChannels } from '../../store/actions/request-actions'
+import { fetchChannels } from '../../store/actions/request-actions'
 
 import AppHeader from '../header/'
 import NewPollPage from './../new-poll-page/'
 import './style.js'
 
-function App() {
+function App({ ...props }) {
   useEffect(() => {
     const fetchData = async () => {
       return await request('channels')
@@ -21,8 +21,10 @@ function App() {
           .sort((a, b) => (a.name > b.name ? 1 : -1))
           .map(channel => ({ ...channel, option: `#${channel.name}` }))
       )
-      .then(data => setChannels(data))
+      .then(data => fetchChannels(data))
   }, [])
+
+  console.log('debugging props', props)
 
   // decide name
   return (
@@ -43,7 +45,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = {
-  setChannels
+  fetchChannels
 }
 
 const AppContainer = connect(

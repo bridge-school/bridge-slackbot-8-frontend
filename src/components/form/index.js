@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { withTranslation } from 'react-i18next'
+import { connect } from 'react-redux'
 
 import FormInput from '../form-input'
 import FormButton from '../button'
@@ -15,18 +16,9 @@ const validateForm = errors => {
   return valid
 }
 
-const fetchChannels = async () =>
-  await fetch('http://localhost:8081/channels')
-    .then(res => res.json())
-    .then(res =>
-      res
-        .sort((a, b) => (a.name > b.name ? 1 : -1))
-        .map(channel => ({ ...channel, option: `#${channel.name}` }))
-    )
-
 class PollForm extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
 
     this.state = {
       question: '',
@@ -75,12 +67,14 @@ class PollForm extends Component {
   }
 
   componentDidMount() {
-    // Fetch channels from backend and set in state
-    // TODO: convert to redux and shrink down/modularize component
-    fetchChannels().then(data => this.setState({ options: data }))
+    // Set fetched channels to state when component mounts
+    this.setState({ options: this.props.channels })
+    console.log('debugging state assignment', this.state.options)
   }
 
   render() {
+    console.log('debugging props on render', this.props)
+
     const { t } = this.props
     const { question, errors } = this.state
     return (
@@ -120,4 +114,10 @@ class PollForm extends Component {
   }
 }
 
-export default withTranslation()(PollForm)
+const mapStateToProps = state => ({
+  channels: state.requestsReducer.channels
+})
+
+const PollFormContainer = connect(mapStateToProps)(PollForm)
+
+export default withTranslation()(PollFormContainer)
