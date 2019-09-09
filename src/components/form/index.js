@@ -15,6 +15,15 @@ const validateForm = errors => {
   return valid
 }
 
+const fetchChannels = async () =>
+  await fetch('http://localhost:8081/channels')
+    .then(res => res.json())
+    .then(res =>
+      res
+        .sort((a, b) => (a.name > b.name ? 1 : -1))
+        .map(channel => ({ ...channel, option: `#${channel.name}` }))
+    )
+
 class PollForm extends Component {
   constructor() {
     super()
@@ -22,14 +31,10 @@ class PollForm extends Component {
     this.state = {
       question: '',
       channel: null,
+      options: [],
       errors: {
         question: ''
-      },
-
-      // Dummy data, this should be replaced once connected to the store and to the Slack API
-      // If needed, we can create a utility function to map the fetched channels to an array
-      // of objects containing option and value pairs
-      options: ['general', 'random', 'toronto']
+      }
     }
 
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -69,6 +74,12 @@ class PollForm extends Component {
     }
   }
 
+  componentDidMount() {
+    // Fetch channels from backend and set in state
+    // TODO: convert to redux and shrink down/modularize component
+    fetchChannels().then(data => this.setState({ options: data }))
+  }
+
   render() {
     const { t } = this.props
     const { question, errors } = this.state
@@ -91,8 +102,8 @@ class PollForm extends Component {
             value={this.state.selected}
             onChange={this.handleInputChange}
           >
-            {this.state.options.map((option, index) => (
-              <Dropdown.Option key={`option-${index}`} id={option}>
+            {this.state.options.map(({ id, name, option }) => (
+              <Dropdown.Option key={id} id={name}>
                 {option}
               </Dropdown.Option>
             ))}
