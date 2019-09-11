@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { withTranslation } from 'react-i18next'
 import { connect } from 'react-redux'
-import { request } from '../../backend-request/index'
 
 import FormInput from '../form-input'
 import FormButton from '../button'
@@ -16,15 +15,6 @@ const validateForm = errors => {
   })
   return valid
 }
-
-const fetchChannels = async () =>
-  await request('channels')
-    .then(res => res.json())
-    .then(res =>
-      res
-        .sort((a, b) => (a.name > b.name ? 1 : -1))
-        .map(channel => ({ ...channel, option: `#${channel.name}` }))
-    )
 
 const sendPoll = () => fetch('http://localhost:8081/poll', { method: 'POST' })
 
@@ -85,9 +75,6 @@ class PollForm extends Component {
   componentDidMount() {
     // Set fetched channels to state when component mounts
     this.setState({ options: this.props.channels })
-    console.log('debugging state assignment', this.state.options)
-
-    // fetchChannels().then(data => this.setState({ options: data }))
   }
 
   render() {
