@@ -8,7 +8,7 @@ import AppHeader from '../header/'
 import NewPollPage from './../new-poll-page/'
 import './style.js'
 
-function App({ ...props }) {
+function App({ fetchChannels, ...props }) {
   useEffect(() => {
     const fetchData = async () => {
       return await request('channels')
