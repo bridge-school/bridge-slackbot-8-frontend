@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { withTranslation } from 'react-i18next'
+import { request } from '../../backend-request/index'
 
 import FormInput from '../form-input'
 import FormButton from '../button'
@@ -16,15 +17,13 @@ const validateForm = errors => {
 }
 
 const fetchChannels = async () =>
-  await fetch('http://localhost:8081/channels')
+  await request('channels')
     .then(res => res.json())
     .then(res =>
       res
         .sort((a, b) => (a.name > b.name ? 1 : -1))
         .map(channel => ({ ...channel, option: `#${channel.name}` }))
     )
-
-
 
 const sendPoll = () => fetch('http://localhost:8081/poll', { method: "POST" })
 
@@ -69,7 +68,6 @@ class PollForm extends Component {
 
     try {
       validateForm(this.state.errors)
-
       // turn to if/else caus we need to send the poll and clear the form
         ? console.log('form valid')
         : console.log('form invalid')
