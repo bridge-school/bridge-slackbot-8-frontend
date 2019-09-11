@@ -24,15 +24,8 @@ const fetchChannels = async () =>
         .map(channel => ({ ...channel, option: `#${channel.name}` }))
     )
 
-    const sendPoll = () =>
-    fetch('http://localhost:8081/poll', { method: "POST" })
-      .then(res => res.json())
-      .then(res =>
-        // res
-        //   .sort((a, b) => (a.name > b.name ? 1 : -1))
-        //   .map(channel => ({ ...channel, option: `#${channel.name}` }))
-        console.log(res)
-      )
+
+const sendPoll = () => fetch('http://localhost:8081/poll', { method: "POST" })
 
 class PollForm extends Component {
   constructor() {
@@ -75,6 +68,7 @@ class PollForm extends Component {
 
     try {
       validateForm(this.state.errors)
+      // turn to if/else caus we need to send the poll and clear the form
         ? console.log('form valid')
         : console.log('form invalid')
 
