@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { withTranslation } from 'react-i18next'
+import { request } from '../../backend-request/index'
 
 import FormInput from '../form-input'
 import FormButton from '../button'
@@ -16,7 +17,7 @@ const validateForm = errors => {
 }
 
 const fetchChannels = async () =>
-  await fetch('http://localhost:8081/channels')
+  await request('channels')
     .then(res => res.json())
     .then(res =>
       res
