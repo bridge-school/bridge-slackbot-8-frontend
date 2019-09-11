@@ -25,6 +25,7 @@ const fetchChannels = async () =>
     )
 
 
+
 const sendPoll = () => fetch('http://localhost:8081/poll', { method: "POST" })
 
 class PollForm extends Component {
@@ -68,11 +69,13 @@ class PollForm extends Component {
 
     try {
       validateForm(this.state.errors)
+
       // turn to if/else caus we need to send the poll and clear the form
         ? console.log('form valid')
         : console.log('form invalid')
 
         sendPoll()
+
       // clear the field on submit
       this.setState({ question: '' })
     } catch (error) {
