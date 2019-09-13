@@ -78,8 +78,6 @@ class PollForm extends Component {
   }
 
   render() {
-    console.log('debugging props on render', this.props)
-
     const { t } = this.props
     const { question, errors } = this.state
     return (
@@ -101,7 +99,7 @@ class PollForm extends Component {
             value={this.state.selected}
             onChange={this.handleInputChange}
           >
-            {this.state.options.map(({ id, name, option }) => (
+            {this.props.channels.map(({ id, name, option }) => (
               <Dropdown.Option key={id} id={name}>
                 {option}
               </Dropdown.Option>

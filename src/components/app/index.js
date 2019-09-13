@@ -8,23 +8,14 @@ import AppHeader from '../header/'
 import NewPollPage from './../new-poll-page/'
 import './style.js'
 
-function App({ fetchChannels, ...props }) {
+function App({ fetchChannels }) {
   useEffect(() => {
     const fetchData = async () => {
       return await request('channels')
     }
 
-    fetchData()
-      .then(res => res.json())
-      .then(data =>
-        data
-          .sort((a, b) => (a.name > b.name ? 1 : -1))
-          .map(channel => ({ ...channel, option: `#${channel.name}` }))
-      )
-      .then(data => fetchChannels(data))
+    fetchChannels(fetchData)
   }, [])
-
-  console.log('debugging props', props)
 
   // decide name
   return (
