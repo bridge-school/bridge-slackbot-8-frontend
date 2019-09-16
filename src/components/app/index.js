@@ -1,17 +1,22 @@
 import React, { useEffect } from 'react'
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom'
+import { connect } from 'react-redux'
 import { request } from '../../backend-request'
+import { fetchChannels } from '../../store/actions/request-actions'
+
 import AppHeader from '../header/'
 import NewPollPage from './../new-poll-page/'
 import './style.js'
 
-function App() {
+function App({ fetchChannels }) {
   useEffect(() => {
     const fetchData = async () => {
-      return await request('health')
+      return await request('channels')
     }
-    fetchData()
-  })
+
+    fetchChannels(fetchData)
+  }, [fetchChannels])
+
   // decide name
   return (
     <Router>
@@ -26,4 +31,17 @@ function App() {
   )
 }
 
-export default App
+const mapStateToProps = state => ({
+  channels: state.requestsReducer.channels
+})
+
+const mapDispatchToProps = {
+  fetchChannels
+}
+
+const AppContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App)
+
+export default AppContainer
