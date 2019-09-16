@@ -16,4 +16,7 @@ export const fetchChannels = response => dispatch => {
         .map(channel => ({ ...channel, option: `#${channel.name}` }))
     )
     .then(data => dispatch(setChannels(data)))
+    .catch(error => console.log(error))
+
+  // TODO: create an action handler for error handling and replace console log
 }
