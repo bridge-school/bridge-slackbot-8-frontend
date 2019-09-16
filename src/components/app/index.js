@@ -15,7 +15,7 @@ function App({ fetchChannels }) {
     }
 
     fetchChannels(fetchData)
-  }, [])
+  }, [fetchChannels])
 
   // decide name
   return (
