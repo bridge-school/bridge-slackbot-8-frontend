@@ -25,7 +25,6 @@ class PollForm extends Component {
     this.state = {
       question: '',
       channel: null,
-      options: [],
       errors: {
         question: ''
       }
@@ -70,11 +69,6 @@ class PollForm extends Component {
     } catch (error) {
       console.log(error)
     }
-  }
-
-  componentDidMount() {
-    // Set fetched channels to state when component mounts
-    this.setState({ options: this.props.channels })
   }
 
   render() {
