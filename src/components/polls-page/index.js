@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 // import { directive } from '@babel/types'
-import { Polls, H2 } from './style'
+import { Polls, H2, PollList, Poll, Channel, Alert } from './style'
 
 const pollsInfo = (data) => {
     return data.map( ({question, channel: {name}, id}) => ({ question: question, name: name, id}))
@@ -22,20 +22,18 @@ class SubmittedPolls extends Component {
             <H2>Submitted Polls</H2>
 
             { this.state.loading ? 
-                <p>Please wait while the list is loading.</p>
+                <Alert>Please wait while the list is loading.</Alert>
                 : (
                     this.state.pollsList.length > 0 ? 
-                   (<ul>
+                   (<PollList>
                         { this.state.pollsList.map(({id, name, question}) => 
-                            <li key={id}>
-                                <p>Channel: {name}</p>
-                                <Link to={`/polls/:${id}`}>
-                                    {question}
-                                </Link>
-                            </li>
+                            <Poll key={id}>
+                                <Channel>Channel: {name}</Channel>
+                                <Channel>Question: <Link to={`/polls/:${id}`}>{question}</Link></Channel>
+                            </Poll>
                         )}
-                    </ul>) 
-                    : <p>No polls to display, please submit one <Link to="/">here</Link>.</p> 
+                    </PollList>) 
+                    : <Alert>No polls to display, please submit one <Link to="/">here</Link>.</Alert> 
                 )
             }
         </Polls>
