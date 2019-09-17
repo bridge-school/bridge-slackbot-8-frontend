@@ -63,7 +63,7 @@ const ResultPieChart = ({ data }) => (
       height={36}
     />
     <Pie
-      data={mockData}
+      data={data}
       dataKey="value"
       nameKey="name"
       cx="20%"
@@ -72,9 +72,10 @@ const ResultPieChart = ({ data }) => (
       outerRadius={150}
       fill="#82ca9d"
     >
-      {mockData.map((entry, index) => (
-        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-      ))}
+      {data &&
+        data.map((entry, index) => (
+          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+        ))}
     </Pie>
   </PieChart>
 )
