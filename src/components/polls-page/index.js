@@ -29,7 +29,7 @@ class SubmittedPolls extends Component {
                         { this.state.pollsList.map(({id, name, question}) => 
                             <Poll key={id}>
                                 <Channel>Channel: {name}</Channel>
-                                <Channel>Question: <Link to={`/polls/:${id}`}>{question}</Link></Channel>
+                                <Channel>Question: <Link to={`/polls/${id}`}>{question}</Link></Channel>
                             </Poll>
                         )}
                     </PollList>) 
