@@ -18,6 +18,12 @@ const validateForm = errors => {
 
 const sendPoll = () => fetch('http://localhost:8081/poll', { method: 'POST' })
 
+const nullCheck = fields =>
+  Object.entries(fields).reduce(
+    (acc, [key, value]) => (!value ? [...acc, `${key} is required`] : acc),
+    []
+  )
+
 class PollForm extends Component {
   constructor(props) {
     super(props)
@@ -51,6 +57,8 @@ class PollForm extends Component {
 
     const questionError = t('Question is required')
 
+    // const errors = await nullCheck({ question, channel })
+
     await (question.length === 0 &&
       this.setState({
         errors: { ...errors, question: questionError }
@@ -61,6 +69,12 @@ class PollForm extends Component {
         ? // turn to if/else caus we need to send the poll and clear the form
           console.log('form valid')
         : console.log('form invalid')
+
+      // validateForm(errors)
+      // ? // if no errors, do something then clear the field on submit
+      //   this.setState({ question: '', channel: null })
+      // : // if errors, set errors in state for re-render
+      //   this.setState({ errors })
 
       sendPoll()
 
@@ -73,7 +87,7 @@ class PollForm extends Component {
 
   render() {
     const { t } = this.props
-    const { question, errors } = this.state
+    const { question, channel, errors } = this.state
     return (
       <Form onSubmit={this.handleSubmit} noValidate>
         <Fieldset>
@@ -102,6 +116,10 @@ class PollForm extends Component {
           {errors.question.length > 0 && (
             <InputError errorMessage={errors.question} />
           )}
+          {/* {errors &&
+             errors.map((error, i) => (
+               <InputError key={`error-${i}`} errorMessage={error} />
+             ))} */}
           <FormButton type="submit" onClick={this.handleSubmit}>
             Submit Poll
           </FormButton>
