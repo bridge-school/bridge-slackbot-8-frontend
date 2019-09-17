@@ -14,14 +14,15 @@ const formatResponse = originData => {
   return formatedResponse
 }
 
-function PollResultPage() {
+function PollResultPage({ match }) {
+  const pollId = match.params.id
   const [question, setQuestion] = useState('')
   const [channel, setChannel] = useState('')
   const [chartData, setChartData] = useState([])
 
   useEffect(() => {
     const getResponse = async () => {
-      const result = await request('polls/JS5OeMlb2nOL6Att54r3')
+      const result = await request(`polls/${pollId}`)
       const pollData = await result.json()
       const { question, channel, response } = pollData
       const formatedResponse = formatResponse(response)
@@ -30,7 +31,7 @@ function PollResultPage() {
       setChartData(formatedResponse)
     }
     getResponse()
-  }, [])
+  }, [pollId])
 
   return (
     <ResultContainer>

@@ -9,7 +9,7 @@ export const Heading = styled.h1.attrs({
 })``
 
 export const QuestionText = styled.p.attrs({
-  className: `f3 fw6 mid-gray lh-title`
+  className: `f3 fw7 mid-gray lh-title`
 })``
 
 export const ChannelText = styled.p.attrs({
