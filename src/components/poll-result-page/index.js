@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 import { request } from '../../backend-request'
 import ResultPieChart from '../pie-chart'
+import loadingSpinner from '../../assets/loadingSpinner.svg'
 
 import { ResultContainer, Heading, QuestionText, ChannelText } from './style'
 
@@ -19,10 +20,13 @@ function PollResultPage({ match }) {
   const [question, setQuestion] = useState('')
   const [channel, setChannel] = useState('')
   const [chartData, setChartData] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const getResponse = async () => {
       const result = await request(`polls/${pollId}`)
+      setIsLoading(!result.status === 200)
+
       const pollData = await result.json()
       const { question, channel, response } = pollData
       const formatedResponse = formatResponse(response)
@@ -35,10 +39,19 @@ function PollResultPage({ match }) {
 
   return (
     <ResultContainer>
-      <Heading>Poll Results</Heading>
-      <QuestionText>{question}</QuestionText>
-      <ChannelText>Channel Asked: #{channel}</ChannelText>
-      <ResultPieChart data={chartData} />
+      {isLoading ? (
+        <>
+          <Heading>Data is Loading....</Heading>
+          <img src={loadingSpinner} alt="loading spninner" />
+        </>
+      ) : (
+        <>
+          <Heading>Poll Results</Heading>
+          <QuestionText>{question}</QuestionText>
+          <ChannelText>Channel Asked: #{channel}</ChannelText>
+          <ResultPieChart data={chartData} />
+        </>
+      )}
     </ResultContainer>
   )
 }
