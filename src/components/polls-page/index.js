@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { Polls, H2 } from './style'
 
 const pollsInfo = (data) => {
-    return data.map( ({question, channel: {name},  channel: {id}}) => ({ question: question, name: name, id: id}))
+    return data.map( ({question, channel: {name}, id}) => ({ question: question, name: name, id}))
 }
 
 class SubmittedPolls extends Component {
@@ -12,24 +12,7 @@ class SubmittedPolls extends Component {
         super(props)
         this.state = {
           pollsList: [],
-          loading: false,
-          testArr: [
-              {
-                  id: "a",
-                  name: "channelA",
-                  question: "questionA"
-              },
-              {
-                id: "b",
-                name: "channelB",
-                question: "questionB"
-            },
-            {
-                id: "c",
-                name: "channelC",
-                question: "questionC"
-            }
-          ]
+          loading: true,
         }
     }
 
@@ -38,27 +21,22 @@ class SubmittedPolls extends Component {
         <Polls>
             <H2>Submitted Polls</H2>
 
-            { this.state.pollsList.length > 0 ? 
-            (
-                this.state.loading ? 
-                // change to true while it's fetching the data needs to be addes
-                (<p>Please wait while the list is loading.</p>)
+            { this.state.loading ? 
+                <p>Please wait while the list is loading.</p>
                 : (
-                   <ul>
-                       { this.state.pollsList.map(({id, name, question}) => 
-                           <li>
-                            <p>Channel: {name}</p>
-                            <Link to={`/polls/:${id}`}>
-                                {question}
-                            </Link>
-                           </li>
-                       )}
-                   </ul>
+                    this.state.pollsList.length > 0 ? 
+                   (<ul>
+                        { this.state.pollsList.map(({id, name, question}) => 
+                            <li key={id}>
+                                <p>Channel: {name}</p>
+                                <Link to={`/polls/:${id}`}>
+                                    {question}
+                                </Link>
+                            </li>
+                        )}
+                    </ul>) 
+                    : <p>No polls to display, please submit one <Link to="/">here</Link>.</p> 
                 )
-            )
-            : (
-                <p>No polls to display</p>
-            )
             }
         </Polls>
         )
