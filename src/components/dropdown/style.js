@@ -14,11 +14,11 @@ export const Label = styled.label.attrs({
 `
 
 export const Select = styled.div.attrs({
-  className: `mb4 relative`
+  className: `relative`
 })``
 
 export const OptionList = styled.select.attrs({
-  className: `ba br2 bw1 pa2 mb2 db w-100 f4 b--black-20 input-reset`
+  className: `ba br2 bw1 pa2 mb3 db w-100 f4 b--black-20 input-reset`
 })``
 
 export const Option = styled.option.attrs({
