@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const ResultContainer = styled.div.attrs({
-  className: `pa3 pa5-ns bg-near-white`
+  className: `pa3 pa5-ns`
 })``
 
 export const Heading = styled.h1.attrs({
@@ -13,5 +13,5 @@ export const QuestionText = styled.p.attrs({
 })``
 
 export const ChannelText = styled.p.attrs({
-  className: `f6 tracked gray`
+  className: `f6 fw5 tracked gray`
 })``
