@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import { withTranslation } from 'react-i18next'
 import { connect } from 'react-redux'
+import { request } from '../../backend-request'
 
 import FormInput from '../form-input'
 import FormButton from '../button'
 import Dropdown from '../dropdown'
 import InputError from '../input-error'
 import { Form, Legend, Fieldset } from './style'
+// import { createPoll } from '../../store/actions/request-actions'
 
 const validateForm = errors => {
   let valid = true
@@ -16,7 +18,18 @@ const validateForm = errors => {
   return valid
 }
 
-const sendPoll = () => fetch('http://localhost:8081/poll', { method: 'POST' })
+const sendPoll = data => {
+  const sendFormData = async () => {
+    return await request('polls', 'POST', data)
+  }
+
+  sendFormData()
+    .then(res => res.json())
+    .then(data => {
+      // TODO: redirect user to appropriate view
+      console.log(data)
+    })
+}
 
 const nullCheck = fields =>
   Object.entries(fields).reduce(
@@ -31,6 +44,7 @@ class PollForm extends Component {
     this.state = {
       question: '',
       channel: null,
+      channelId: null,
       errors: {
         question: ''
       }
@@ -52,10 +66,16 @@ class PollForm extends Component {
   async handleSubmit(event) {
     event.preventDefault()
 
-    const { question, errors } = this.state
+    const { question, channel, errors } = this.state
     const { t } = this.props
 
     const questionError = t('Question is required')
+
+    const channelId = this.props.channels
+      .filter(({ name }) => channel === name)
+      .map(({ id }) => id)[0]
+
+    console.log(channelId)
 
     // const errors = await nullCheck({ question, channel })
 
@@ -76,7 +96,11 @@ class PollForm extends Component {
       // : // if errors, set errors in state for re-render
       //   this.setState({ errors })
 
-      sendPoll()
+      sendPoll({
+        question,
+        channel_name: channel,
+        channel_id: channelId
+      })
 
       // clear the field on submit
       this.setState({ question: '' })
@@ -130,7 +154,7 @@ class PollForm extends Component {
 }
 
 const mapStateToProps = state => ({
-  channels: state.requestsReducer.channels
+  channels: state.channelsReducer.channels
 })
 
 const PollFormContainer = connect(mapStateToProps)(PollForm)
