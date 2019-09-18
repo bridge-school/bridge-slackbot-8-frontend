@@ -107,6 +107,13 @@ class PollForm extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { pollId } = nextProps
+
+    // If pollId is set, do something
+    pollId && console.log(pollId)
+  }
+
   render() {
     const { t } = this.props
     const { question, channel, errors } = this.state
@@ -152,7 +159,8 @@ class PollForm extends Component {
 }
 
 const mapStateToProps = state => ({
-  channels: state.channelsReducer.channels
+  channels: state.channelsReducer.channels,
+  pollId: state.pollsReducer.pollId
 })
 
 const mapDispatchToProps = {

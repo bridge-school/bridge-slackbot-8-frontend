@@ -5,6 +5,11 @@ const setChannels = channels => ({
   payload: { channels }
 })
 
+const setSlackPostSuccess = pollId => ({
+  type: actions.SET_POST_SUCCESS,
+  payload: { pollId }
+})
+
 export const fetchChannels = response => dispatch => {
   response()
     .then(res => res.json())
@@ -24,9 +29,6 @@ export const fetchChannels = response => dispatch => {
 export const createPoll = response => dispatch => {
   response()
     .then(res => res.json())
-    .then(data => {
-      // TODO: redirect user to appropriate view
-      console.log(data)
-    })
+    .then(data => dispatch(setSlackPostSuccess(data.id)))
     .catch(error => console.log(error))
 }
