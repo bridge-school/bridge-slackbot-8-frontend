@@ -20,3 +20,13 @@ export const fetchChannels = response => dispatch => {
 
   // TODO: create an action handler for error handling and replace console log
 }
+
+export const createPoll = response => dispatch => {
+  response()
+    .then(res => res.json())
+    .then(data => {
+      // TODO: redirect user to appropriate view
+      console.log(data)
+    })
+    .catch(error => console.log(error))
+}

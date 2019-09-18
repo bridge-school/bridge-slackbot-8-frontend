@@ -8,7 +8,7 @@ import FormButton from '../button'
 import Dropdown from '../dropdown'
 import InputError from '../input-error'
 import { Form, Legend, Fieldset } from './style'
-// import { createPoll } from '../../store/actions/request-actions'
+import { createPoll } from '../../store/actions/request-actions'
 
 const validateForm = errors => {
   let valid = true
@@ -18,17 +18,12 @@ const validateForm = errors => {
   return valid
 }
 
-const sendPoll = data => {
-  const sendFormData = async () => {
+const sendPoll = (data, callback) => {
+  const formData = async () => {
     return await request('polls', 'POST', data)
   }
 
-  sendFormData()
-    .then(res => res.json())
-    .then(data => {
-      // TODO: redirect user to appropriate view
-      console.log(data)
-    })
+  callback(formData)
 }
 
 const nullCheck = fields =>
@@ -96,11 +91,14 @@ class PollForm extends Component {
       // : // if errors, set errors in state for re-render
       //   this.setState({ errors })
 
-      sendPoll({
-        question,
-        channel_name: channel,
-        channel_id: channelId
-      })
+      sendPoll(
+        {
+          question,
+          channel_name: channel,
+          channel_id: channelId
+        },
+        this.props.createPoll
+      )
 
       // clear the field on submit
       this.setState({ question: '' })
@@ -157,6 +155,13 @@ const mapStateToProps = state => ({
   channels: state.channelsReducer.channels
 })
 
-const PollFormContainer = connect(mapStateToProps)(PollForm)
+const mapDispatchToProps = {
+  createPoll
+}
+
+const PollFormContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PollForm)
 
 export default withTranslation()(PollFormContainer)
