@@ -6,6 +6,7 @@ import { fetchChannels } from '../../store/actions/request-actions'
 
 import AppHeader from '../header/'
 import NewPollPage from './../new-poll-page/'
+import SubmittedPolls from './../polls-page/'
 import PollResultPage from './../poll-result-page'
 import './style.js'
 
@@ -26,6 +27,7 @@ function App({ fetchChannels }) {
         <Switch>
           <Route exact path="/" component={NewPollPage} />
           <Route exact path="/new-poll" component={NewPollPage} />
+          <Route exact path="/polls" component={SubmittedPolls} />
           <Route exact path="/polls/:id" component={PollResultPage} />
         </Switch>
       </div>
