@@ -28,20 +28,15 @@ const PollForm = ({ t, channels, history }) => {
   const handleInputChange = event => {
     const { value, id } = event.target
 
-    switch (id) {
-      case 'question':
-        setQuestion(value)
-        break
-      case 'channel':
-        // Map channel id to selected value
-        const channelId = channels
-          .filter(({ name }) => name === value)
-          .map(({ id }) => id)[0]
+    if (id === 'question') {
+      setQuestion(value)
+    } else if (id === 'channel') {
+      // Map channel id to selected value
+      const channelId = channels
+        .filter(({ name }) => name === value)
+        .map(({ id }) => id)[0]
 
-        setChannel({ id: channelId, name: value })
-        break
-      default:
-        return
+      setChannel({ id: channelId, name: value })
     }
   }
 
