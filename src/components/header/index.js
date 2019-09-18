@@ -9,8 +9,8 @@ const AppHeader = () => (
     <Brand>
       <Link to="/">
         <IMG src={logo} alt="Bridge School" />
+        <H1>BridgeBot</H1>
       </Link>
-      <H1>BridgeBot</H1>
     </Brand>
 
     <HeaderLinkList>
