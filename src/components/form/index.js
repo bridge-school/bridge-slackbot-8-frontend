@@ -25,7 +25,6 @@ class PollForm extends Component {
     this.state = {
       question: '',
       channel: null,
-      options: [],
       errors: {
         question: ''
       }
