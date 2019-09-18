@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { withRouter } from 'react-router-dom'
 import { withTranslation } from 'react-i18next'
 import { connect } from 'react-redux'
 import { request } from '../../backend-request'
@@ -13,11 +14,10 @@ const sendPoll = (data, callback) => {
   const formData = async () => {
     return await request('polls', 'POST', data)
   }
-
-  return callback(formData)
+  callback(formData)
 }
 
-const PollForm = ({ t, channels, pollId, createPoll }) => {
+const PollForm = ({ t, channels, pollId, createPoll, history }) => {
   const [question, setQuestion] = useState('')
   const [channel, setChannel] = useState(null)
 
@@ -50,7 +50,6 @@ const PollForm = ({ t, channels, pollId, createPoll }) => {
       channel_name: channel.name,
       channel_id: channel.id
     }
-
     await sendPoll(query, createPoll)
 
     // Clear the field on submit
@@ -59,9 +58,10 @@ const PollForm = ({ t, channels, pollId, createPoll }) => {
   }
 
   // Use hook to replace componentWillReceiveProps
+  // Redirect user once poll id is set
+  // TODO: display toast message for 5 seconds
   useEffect(() => {
-    // TODO: Redirect user once poll id is set
-    pollId && console.log(`redirect to '/polls/${pollId}'`)
+    pollId && history.push(`/polls/${pollId}`)
   }, [pollId])
 
   // Render
@@ -110,6 +110,6 @@ const mapDispatchToProps = {
 const PollFormContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(PollForm)
+)(withRouter(PollForm))
 
 export default withTranslation()(PollFormContainer)
