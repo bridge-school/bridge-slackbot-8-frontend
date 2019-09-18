@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { withTranslation } from 'react-i18next'
+import { connect } from 'react-redux'
 
 import FormInput from '../form-input'
 import FormButton from '../button'
@@ -15,18 +16,11 @@ const validateForm = errors => {
   return valid
 }
 
-const fetchChannels = async () =>
-  await fetch('http://localhost:8081/channels')
-    .then(res => res.json())
-    .then(res =>
-      res
-        .sort((a, b) => (a.name > b.name ? 1 : -1))
-        .map(channel => ({ ...channel, option: `#${channel.name}` }))
-    )
+const sendPoll = () => fetch('http://localhost:8081/poll', { method: 'POST' })
 
 class PollForm extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
 
     this.state = {
       question: '',
@@ -65,19 +59,17 @@ class PollForm extends Component {
 
     try {
       validateForm(this.state.errors)
-        ? console.log('form valid')
+        ? // turn to if/else caus we need to send the poll and clear the form
+          console.log('form valid')
         : console.log('form invalid')
+
+      sendPoll()
+
       // clear the field on submit
       this.setState({ question: '' })
     } catch (error) {
       console.log(error)
     }
-  }
-
-  componentDidMount() {
-    // Fetch channels from backend and set in state
-    // TODO: convert to redux and shrink down/modularize component
-    fetchChannels().then(data => this.setState({ options: data }))
   }
 
   render() {
@@ -102,7 +94,7 @@ class PollForm extends Component {
             value={this.state.selected}
             onChange={this.handleInputChange}
           >
-            {this.state.options.map(({ id, name, option }) => (
+            {this.props.channels.map(({ id, name, option }) => (
               <Dropdown.Option key={id} id={name}>
                 {option}
               </Dropdown.Option>
@@ -120,4 +112,10 @@ class PollForm extends Component {
   }
 }
 
-export default withTranslation()(PollForm)
+const mapStateToProps = state => ({
+  channels: state.requestsReducer.channels
+})
+
+const PollFormContainer = connect(mapStateToProps)(PollForm)
+
+export default withTranslation()(PollFormContainer)
