@@ -7,21 +7,32 @@ import { request } from '../../backend-request'
 import FormInput from '../form-input'
 import FormButton from '../button'
 import Dropdown from '../dropdown'
+import { InputError, ErrorBlock } from '../input-error'
 import { Form, Legend, Fieldset } from './style'
 
-const sendPoll = (data, callback) => {
+// New poll request
+const sendPoll = (data, errors, callback) => {
   const formSubmit = async () => {
     return await request('polls', 'POST', data)
   }
   formSubmit()
     .then(res => res.json())
     .then(data => callback(data.id))
-    .catch(error => console.log(error))
+    .catch(error => errors({ api: error }))
 }
+
+// Componentize dropdown list to organize form component and for better readability
+const DropdownList = ({ list }) =>
+  list.map(({ id, name, option }) => (
+    <Dropdown.Option key={id} id={name}>
+      {option}
+    </Dropdown.Option>
+  ))
 
 const PollForm = ({ t, channels, history }) => {
   const [question, setQuestion] = useState('')
   const [channel, setChannel] = useState(null)
+  const [errors, setErrors] = useState({})
   const [pollId, setPollId] = useState('')
 
   // Handle input change
@@ -48,11 +59,12 @@ const PollForm = ({ t, channels, history }) => {
       channel_name: channel.name,
       channel_id: channel.id
     }
-    await sendPoll(query, setPollId)
+    await sendPoll(query, setErrors, setPollId)
 
     // Clear the field on submit
     setQuestion('')
     setChannel(null)
+    setErrors({})
   }
 
   // Use hook to replace componentWillReceiveProps
@@ -67,6 +79,8 @@ const PollForm = ({ t, channels, history }) => {
     <Form onSubmit={handleSubmit} noValidate>
       <Fieldset>
         <Legend>Create New Poll</Legend>
+        {errors.api && <ErrorBlock errorMessage={errors.api} />}
+
         <FormInput
           id="question"
           name="question"
@@ -75,6 +89,8 @@ const PollForm = ({ t, channels, history }) => {
           onChange={handleInputChange}
           required
         />
+        {errors.question && <InputError errorMessage={errors.question} />}
+
         <Dropdown
           id="channel"
           label={t('User Group')}
@@ -82,12 +98,10 @@ const PollForm = ({ t, channels, history }) => {
           value={channel}
           onChange={handleInputChange}
         >
-          {channels.map(({ id, name, option }) => (
-            <Dropdown.Option key={id} id={name}>
-              {option}
-            </Dropdown.Option>
-          ))}
+          <DropdownList list={channels} />
         </Dropdown>
+        {errors.channel && <InputError errorMessage={errors.channel} />}
+
         <FormButton type="submit" onClick={handleSubmit}>
           Submit Poll
         </FormButton>
