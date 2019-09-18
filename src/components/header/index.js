@@ -1,14 +1,23 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import logo from './bridge-logo.png'
-import { Header, H1, IMG } from './style'
+
+import logo from '../../assets/bridge-logo.png'
+import { Header, H1, IMG, HeaderLink, HeaderLinkList, Brand } from './style'
 
 const AppHeader = () => (
   <Header>
-    <Link to="/">
-      <IMG src={logo} alt="Bridge School" />
-    </Link>
-    <H1>BridgeBot</H1>
+    <Brand>
+      <Link to="/">
+        <IMG src={logo} alt="Bridge School" />
+        <H1>BridgeBot</H1>
+      </Link>
+    </Brand>
+
+    <HeaderLinkList>
+      <Link to="/new-poll" className="link">
+        <HeaderLink>New Poll</HeaderLink>
+      </Link>
+    </HeaderLinkList>
   </Header>
 )
 
