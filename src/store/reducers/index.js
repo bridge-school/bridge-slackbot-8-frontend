@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux'
-import requestsReducer from './api-requests'
+import channelsReducer from './channels'
 import formDataReducer from './form-data'
 
 const rootReducer = combineReducers({
-  requestsReducer,
+  channelsReducer,
   formDataReducer
 })
 
