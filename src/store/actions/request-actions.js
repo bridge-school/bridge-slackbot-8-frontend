@@ -5,11 +5,6 @@ const setChannels = channels => ({
   payload: { channels }
 })
 
-const setSlackPostSuccess = pollId => ({
-  type: actions.SET_POST_SUCCESS,
-  payload: { pollId }
-})
-
 export const fetchChannels = response => dispatch => {
   response()
     .then(res => res.json())
@@ -24,11 +19,4 @@ export const fetchChannels = response => dispatch => {
     .catch(error => console.log(error))
 
   // TODO: create an action handler for error handling and replace console log
-}
-
-export const createPoll = response => dispatch => {
-  response()
-    .then(res => res.json())
-    .then(data => dispatch(setSlackPostSuccess(data.id)))
-    .catch(error => console.log(error))
 }

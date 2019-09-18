@@ -3,7 +3,6 @@ import { withRouter } from 'react-router-dom'
 import { withTranslation } from 'react-i18next'
 import { connect } from 'react-redux'
 import { request } from '../../backend-request'
-import { createPoll } from '../../store/actions/request-actions'
 
 import FormInput from '../form-input'
 import FormButton from '../button'
@@ -11,15 +10,19 @@ import Dropdown from '../dropdown'
 import { Form, Legend, Fieldset } from './style'
 
 const sendPoll = (data, callback) => {
-  const formData = async () => {
+  const formSubmit = async () => {
     return await request('polls', 'POST', data)
   }
-  callback(formData)
+  formSubmit()
+    .then(res => res.json())
+    .then(data => callback(data.id))
+    .catch(error => console.log(error))
 }
 
-const PollForm = ({ t, channels, pollId, createPoll, history }) => {
+const PollForm = ({ t, channels, history }) => {
   const [question, setQuestion] = useState('')
   const [channel, setChannel] = useState(null)
+  const [pollId, setPollId] = useState('')
 
   // Handle input change
   const handleInputChange = event => {
@@ -50,7 +53,7 @@ const PollForm = ({ t, channels, pollId, createPoll, history }) => {
       channel_name: channel.name,
       channel_id: channel.id
     }
-    await sendPoll(query, createPoll)
+    await sendPoll(query, setPollId)
 
     // Clear the field on submit
     setQuestion('')
@@ -62,7 +65,7 @@ const PollForm = ({ t, channels, pollId, createPoll, history }) => {
   // TODO: display toast message for 5 seconds
   useEffect(() => {
     pollId && history.push(`/polls/${pollId}`)
-  }, [pollId])
+  }, [pollId, history])
 
   // Render
   return (
@@ -99,17 +102,9 @@ const PollForm = ({ t, channels, pollId, createPoll, history }) => {
 }
 
 const mapStateToProps = state => ({
-  channels: state.channelsReducer.channels,
-  pollId: state.pollsReducer.pollId
+  channels: state.channelsReducer.channels
 })
 
-const mapDispatchToProps = {
-  createPoll
-}
-
-const PollFormContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withRouter(PollForm))
+const PollFormContainer = connect(mapStateToProps)(withRouter(PollForm))
 
 export default withTranslation()(PollFormContainer)
