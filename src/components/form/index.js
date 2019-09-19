@@ -122,6 +122,7 @@ const PollForm = ({ t, channels, apiError, history }) => {
             name="question"
             label={t('Question')}
             value={question}
+            hasError={errors.question}
             onChange={handleInputChange}
             required
           />
@@ -132,6 +133,7 @@ const PollForm = ({ t, channels, apiError, history }) => {
             label={t('Channels')}
             placeholder={t('Select a channel')}
             value={channel ? channel : 'default'}
+            hasError={errors.channel}
             onChange={handleInputChange}
           >
             <DropdownList list={channels} />

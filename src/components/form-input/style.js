@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
-export const Input = styled.input.attrs(props => ({
+export const Input = styled.input.attrs(({ hasError }) => ({
   className: `input-reset ba br2 bw1 pa2 mb3 db w-100 f4 border-box ${
-    props.hasError ? 'b--dark-red' : 'b--black-20'
+    hasError ? 'b--dark-red' : 'b--black-20'
   }`
 }))``
 
