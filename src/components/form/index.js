@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { withRouter } from 'react-router-dom'
 import { withTranslation } from 'react-i18next'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
+
 import { request } from '../../backend-request'
 import { nullCheck, validateForm } from '../../utils/validate'
 
@@ -9,6 +10,7 @@ import FormInput from '../form-input'
 import FormButton from '../button'
 import Dropdown from '../dropdown'
 import { InputError, MessageBlock } from '../message-blocks'
+
 import { Form, Legend, Fieldset, LoadingMessage } from './style'
 import loadingSpinner from '../../assets/loadingSpinner.svg'
 
@@ -26,12 +28,13 @@ const sendPoll = (data, loading, errors, success) => {
 }
 
 // Componentize dropdown list to organize form component and for better readability
-const DropdownList = ({ list }) =>
-  list.map(({ id, name, option }) => (
+const DropdownList = ({ list }) => {
+  return list.map(({ id, name, option }) => (
     <Dropdown.Option key={id} id={name}>
       {option}
     </Dropdown.Option>
   ))
+}
 
 const PollForm = ({ t, channels, apiError, history }) => {
   const [question, setQuestion] = useState('')
@@ -44,16 +47,12 @@ const PollForm = ({ t, channels, apiError, history }) => {
   const handleInputChange = event => {
     const { value, id } = event.target
 
-    if (id === 'question') {
-      setQuestion(value)
-    } else if (id === 'channel') {
+    id === 'question' && setQuestion(value)
+    id === 'channel' &&
       // Map channel id to selected value
-      const channelId = channels
-        .filter(({ name }) => name === value)
-        .map(({ id }) => id)[0]
-
-      setChannel({ id: channelId, name: value })
-    }
+      channels.forEach(({ id, name }) => {
+        name === value && setChannel({ id, name: value })
+      })
 
     // Clear errors on input change
     setErrors({ ...errors, [id]: null, api: null })
@@ -71,12 +70,9 @@ const PollForm = ({ t, channels, apiError, history }) => {
           channel_name: channel.name,
           channel_id: channel.id
         }
+        // Send request and clear fields on submit
         sendPoll(query, setIsLoading, setErrors, setSuccess)
-
-        // Clear the field on submit
-        setQuestion('')
-        setChannel(null)
-        setErrors({})
+        setQuestion('') && setChannel(null) && setErrors({})
       } else {
         setErrors({ ...errors, ...isNull })
       }
@@ -85,18 +81,16 @@ const PollForm = ({ t, channels, apiError, history }) => {
     }
   }
 
-  // Set errors if channel fetch failed
-  useEffect(() => {
-    apiError && setErrors({ api: apiError })
-  }, [apiError])
-
   // Show toast message for 5s, then redirect user on form submission success
+  // Otherwise Set errors if channel fetch failed
   useEffect(() => {
     if (success.state) {
       setIsLoading(false)
       setTimeout(() => history.push(`/polls/${success.id}`), 5000)
+    } else if (apiError) {
+      setErrors({ api: apiError })
     }
-  }, [success, history])
+  }, [apiError, success, history])
 
   // Render
   return (
