@@ -7,8 +7,22 @@ import { request } from '../../backend-request'
 import FormInput from '../form-input'
 import FormButton from '../button'
 import Dropdown from '../dropdown'
-import { InputError, ErrorBlock } from '../input-error'
+import { InputError, MessageBlock } from '../message-blocks'
 import { Form, Legend, Fieldset } from './style'
+
+const validateForm = errors => {
+  let valid = true
+  Object.values(errors).forEach(val => {
+    val.length > 0 && (valid = false)
+  })
+  return valid
+}
+
+const nullCheck = (t, fields) =>
+  Object.entries(fields).reduce((acc, [key, value]) => {
+    const capitalizedKey = key.slice(0, 1).toUpperCase() + key.slice(1)
+    return !value ? { ...acc, [key]: t(`${capitalizedKey} is required`) } : acc
+  }, {})
 
 // New poll request
 const sendPoll = (data, errors, callback) => {
@@ -17,7 +31,7 @@ const sendPoll = (data, errors, callback) => {
   }
   formSubmit()
     .then(res => res.json())
-    .then(data => callback(data.id))
+    .then(data => callback({ state: true, ...data }))
     .catch(error => errors({ api: error }))
 }
 
@@ -33,7 +47,7 @@ const PollForm = ({ t, channels, history }) => {
   const [question, setQuestion] = useState('')
   const [channel, setChannel] = useState(null)
   const [errors, setErrors] = useState({})
-  const [pollId, setPollId] = useState('')
+  const [success, setSuccess] = useState({ state: false })
 
   // Handle input change
   const handleInputChange = event => {
@@ -49,37 +63,54 @@ const PollForm = ({ t, channels, history }) => {
 
       setChannel({ id: channelId, name: value })
     }
+
+    // Clear errors on input change
+    setErrors({ ...errors, [id]: null, api: null })
   }
 
   // Handle submit
   const handleSubmit = async event => {
     event.preventDefault()
-    const query = {
-      question,
-      channel_name: channel.name,
-      channel_id: channel.id
-    }
-    await sendPoll(query, setErrors, setPollId)
+    const isNull = await nullCheck(t, { question, channel })
 
-    // Clear the field on submit
-    setQuestion('')
-    setChannel(null)
-    setErrors({})
+    try {
+      if (validateForm(isNull)) {
+        // if no errors, do something then clear the field on submit
+        const query = {
+          question,
+          channel_name: channel.name,
+          channel_id: channel.id
+        }
+        sendPoll(query, setErrors, setSuccess)
+        // Clear the field on submit
+        setQuestion('')
+        setChannel(null)
+        setErrors({})
+      } else {
+        setErrors({ ...errors, ...isNull })
+      }
+    } catch (error) {
+      setErrors({ api: error })
+    }
   }
 
   // Use hook to replace componentWillReceiveProps
   // Redirect user once poll id is set
   // TODO: display toast message for 5 seconds
   useEffect(() => {
-    pollId && history.push(`/polls/${pollId}`)
-  }, [pollId, history])
+    success.state &&
+      setTimeout(() => history.push(`/polls/${success.id}`), 3000)
+  }, [success, history])
 
   // Render
   return (
     <Form onSubmit={handleSubmit} noValidate>
       <Fieldset>
         <Legend>Create New Poll</Legend>
-        {errors.api && <ErrorBlock errorMessage={errors.api} />}
+        {(errors.api && <MessageBlock type="error" message={errors.api} />) ||
+          (success.state && (
+            <MessageBlock type="success" message={success.message} />
+          ))}
 
         <FormInput
           id="question"
