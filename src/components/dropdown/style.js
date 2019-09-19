@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const Label = styled.label.attrs({
-  className: `f4 b db mb2 black-60`
+  className: `f3 b db mb2 mid-gray`
 })`
   ::after {
     content: '▼';
