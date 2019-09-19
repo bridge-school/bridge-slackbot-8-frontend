@@ -3,26 +3,13 @@ import { withRouter } from 'react-router-dom'
 import { withTranslation } from 'react-i18next'
 import { connect } from 'react-redux'
 import { request } from '../../backend-request'
+import { nullCheck, validateForm } from '../../utils/validate'
 
 import FormInput from '../form-input'
 import FormButton from '../button'
 import Dropdown from '../dropdown'
 import { InputError, MessageBlock } from '../message-blocks'
 import { Form, Legend, Fieldset } from './style'
-
-const validateForm = errors => {
-  let valid = true
-  Object.values(errors).forEach(val => {
-    val.length > 0 && (valid = false)
-  })
-  return valid
-}
-
-const nullCheck = (t, fields) =>
-  Object.entries(fields).reduce((acc, [key, value]) => {
-    const capitalizedKey = key.slice(0, 1).toUpperCase() + key.slice(1)
-    return !value ? { ...acc, [key]: t(`${capitalizedKey} is required`) } : acc
-  }, {})
 
 // New poll request
 const sendPoll = (data, errors, callback) => {
