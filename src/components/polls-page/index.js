@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { request } from '../../backend-request'
 import loadingSpinner from '../../assets/loadingSpinner.svg'
 import { Polls, H2, PollList, Poll, Question, Channel, Alert } from './style'
 
@@ -18,6 +19,19 @@ class SubmittedPolls extends Component {
       pollsList: [],
       loading: true
     }
+  }
+
+  componentDidMount() {
+    request('polls', 'GET')
+      .then(res => res.json())
+      .then(({ data }) => {
+        const polls = pollsInfo(data)
+
+        this.setState({
+          pollsList: polls,
+          loading: false
+        })
+      })
   }
 
   render() {
@@ -47,19 +61,6 @@ class SubmittedPolls extends Component {
         )}
       </Polls>
     )
-  }
-
-  componentDidMount() {
-    fetch('http://localhost:8081/polls', { method: 'GET' })
-      .then(res => res.json())
-      .then(({ data }) => {
-        const polls = pollsInfo(data)
-
-        this.setState({
-          pollsList: polls,
-          loading: false
-        })
-      })
   }
 }
 
