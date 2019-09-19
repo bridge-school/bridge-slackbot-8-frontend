@@ -9,5 +9,5 @@ export const Fieldset = styled.fieldset.attrs({
 })``
 
 export const Legend = styled.legend.attrs({
-  className: `f2 lh-title fw7 ph0 mh0 grey mb4 mid-gray`
+  className: `f2 lh-title fw9 ph0 mt0 mb3 grey dark-gray`
 })``
