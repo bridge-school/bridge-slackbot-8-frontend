@@ -17,11 +17,17 @@ export const Select = styled.div.attrs({
   className: `relative`
 })``
 
-export const OptionList = styled.select.attrs(({ currentValue, hasError }) => ({
-  className: `ba br2 bw1 pa2 mb3 db w-100 f4 input-reset
-    ${currentValue === 'default' ? 'black-60' : 'black'}
-    ${hasError ? 'b--dark-red' : 'b--black-20'}`
-}))``
+export const OptionList = styled.select.attrs(({ currentValue, hasError }) => {
+  const conditionalClasses = hasError
+    ? 'b--dark-red dark-red'
+    : currentValue === 'default'
+    ? 'b--black-20 black-60'
+    : 'b--black-20 black'
+
+  return {
+    className: `ba br2 bw1 pa2 mb3 db w-100 f4 input-reset ${conditionalClasses}`
+  }
+})``
 
 export const Option = styled.option.attrs({
   className: ``

@@ -1,6 +1,6 @@
 import React from 'react'
-import errorIcon from '../../assets/alert.svg'
-import successIcon from '../../assets/success.svg'
+import errorIcon from '../../assets/images/icons/alert.svg'
+import successIcon from '../../assets/images/icons/success.svg'
 import { ErrorMessage, MessageContainer, MessageIcon } from './style'
 
 export const InputError = ({ errorMessage }) => (

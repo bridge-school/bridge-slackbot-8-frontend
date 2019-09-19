@@ -96,7 +96,7 @@ const PollForm = ({ t, channels, apiError, history }) => {
       setIsLoading(false)
       setTimeout(() => history.push(`/polls/${success.id}`), 5000)
     }
-  }, [success, isLoading, history])
+  }, [success, history])
 
   // Render
   return (
@@ -109,15 +109,14 @@ const PollForm = ({ t, channels, apiError, history }) => {
         </>
       ) : (
         <>
-          {(errors.api && <MessageBlock type="error" message={errors.api} />) ||
-            (success.state && (
-              <MessageBlock
-                type="success"
-                message={`${success.message}. Redirecting to poll page...`}
-              />
-            ))}
+          {errors.api && <MessageBlock type="error" message={errors.api} />}
 
-          {!success.state && (
+          {!errors.api && success.state ? (
+            <MessageBlock
+              type="success"
+              message={`${success.message}. Redirecting to poll page...`}
+            />
+          ) : (
             <Fieldset>
               <FormInput
                 id="question"
