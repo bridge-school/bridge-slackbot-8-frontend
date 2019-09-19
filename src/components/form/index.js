@@ -118,7 +118,11 @@ const PollForm = ({ t, channels, history }) => {
         </Dropdown>
         {errors.channel && <InputError errorMessage={errors.channel} />}
 
-        <FormButton type="submit" onClick={handleSubmit}>
+        <FormButton
+          type="submit"
+          onClick={handleSubmit}
+          disabled={success.state}
+        >
           Submit Poll
         </FormButton>
       </Fieldset>
