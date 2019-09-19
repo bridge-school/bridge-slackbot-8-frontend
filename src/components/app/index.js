@@ -25,9 +25,8 @@ function App({ fetchChannels }) {
       <div>
         <AppHeader />
         <Switch>
-          <Route exact path="/" component={NewPollPage} />
+          <Route exact path="/" component={SubmittedPolls} />
           <Route exact path="/new-poll" component={NewPollPage} />
-          <Route exact path="/polls" component={SubmittedPolls} />
           <Route exact path="/polls/:id" component={PollResultPage} />
         </Switch>
       </div>
