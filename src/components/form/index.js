@@ -62,13 +62,13 @@ const PollForm = ({ t, channels, history }) => {
 
     try {
       if (validateForm(isNull)) {
-        // if no errors, do something then clear the field on submit
         const query = {
           question,
           channel_name: channel.name,
           channel_id: channel.id
         }
         sendPoll(query, setErrors, setSuccess)
+
         // Clear the field on submit
         setQuestion('')
         setChannel(null)
@@ -81,12 +81,10 @@ const PollForm = ({ t, channels, history }) => {
     }
   }
 
-  // Use hook to replace componentWillReceiveProps
-  // Redirect user once poll id is set
-  // TODO: display toast message for 5 seconds
+  // Show toast message for 4s, then redirect user on form submission success
   useEffect(() => {
     success.state &&
-      setTimeout(() => history.push(`/polls/${success.id}`), 3000)
+      setTimeout(() => history.push(`/polls/${success.id}`), 4000)
   }, [success, history])
 
   // Render
@@ -111,9 +109,9 @@ const PollForm = ({ t, channels, history }) => {
 
         <Dropdown
           id="channel"
-          label={t('User Group')}
+          label={t('Channels')}
           placeholder={t('Select a channel')}
-          value={channel}
+          value={channel ? channel : 'default'}
           onChange={handleInputChange}
         >
           <DropdownList list={channels} />
