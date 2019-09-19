@@ -131,7 +131,7 @@ const PollForm = ({ t, channels, apiError, history }) => {
 
               <Dropdown
                 id="channel"
-                label={t('Channels')}
+                label={t('Channel')}
                 placeholder={t('Select a channel')}
                 value={channel ? channel : 'default'}
                 hasError={errors.channel}
