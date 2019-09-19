@@ -113,7 +113,7 @@ const PollForm = ({ t, channels, apiError, history }) => {
             (success.state && (
               <MessageBlock
                 type="success"
-                message={`${success.message}. Redirecting shortly...`}
+                message={`${success.message}. Redirecting to poll page...`}
               />
             ))}
 
