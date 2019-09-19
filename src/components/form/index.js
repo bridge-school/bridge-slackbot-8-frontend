@@ -33,7 +33,7 @@ const DropdownList = ({ list }) =>
     </Dropdown.Option>
   ))
 
-const PollForm = ({ t, channels, history }) => {
+const PollForm = ({ t, channels, apiError, history }) => {
   const [question, setQuestion] = useState('')
   const [channel, setChannel] = useState(null)
   const [errors, setErrors] = useState({})
@@ -85,11 +85,16 @@ const PollForm = ({ t, channels, history }) => {
     }
   }
 
-  // Show toast message for 4s, then redirect user on form submission success
+  // Set errors if channel fetch failed
+  useEffect(() => {
+    apiError && setErrors({ api: apiError })
+  }, [apiError])
+
+  // Show toast message for 5s, then redirect user on form submission success
   useEffect(() => {
     if (success.state) {
       setIsLoading(false)
-      setTimeout(() => history.push(`/polls/${success.id}`), 4000)
+      setTimeout(() => history.push(`/polls/${success.id}`), 5000)
     }
   }, [success, isLoading, history])
 
@@ -151,7 +156,8 @@ const PollForm = ({ t, channels, history }) => {
 }
 
 const mapStateToProps = state => ({
-  channels: state.channelsReducer.channels
+  channels: state.channelsReducer.channels,
+  apiError: state.errorsReducer.errors
 })
 
 const PollFormContainer = connect(mapStateToProps)(withRouter(PollForm))
