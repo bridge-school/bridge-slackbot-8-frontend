@@ -9,10 +9,13 @@ import FormInput from '../form-input'
 import FormButton from '../button'
 import Dropdown from '../dropdown'
 import { InputError, MessageBlock } from '../message-blocks'
-import { Form, Legend, Fieldset } from './style'
+import { Form, Legend, Fieldset, Heading } from './style'
+import loadingSpinner from '../../assets/loadingSpinner.svg'
 
 // New poll request
-const sendPoll = (data, errors, callback) => {
+const sendPoll = (data, loading, errors, callback) => {
+  loading(true)
+
   const formSubmit = async () => {
     return await request('polls', 'POST', data)
   }
@@ -35,6 +38,7 @@ const PollForm = ({ t, channels, history }) => {
   const [channel, setChannel] = useState(null)
   const [errors, setErrors] = useState({})
   const [success, setSuccess] = useState({ state: false })
+  const [isLoading, setIsLoading] = useState(false)
 
   // Handle input change
   const handleInputChange = event => {
@@ -67,7 +71,7 @@ const PollForm = ({ t, channels, history }) => {
           channel_name: channel.name,
           channel_id: channel.id
         }
-        sendPoll(query, setErrors, setSuccess)
+        sendPoll(query, setIsLoading, setErrors, setSuccess)
 
         // Clear the field on submit
         setQuestion('')
@@ -83,50 +87,66 @@ const PollForm = ({ t, channels, history }) => {
 
   // Show toast message for 4s, then redirect user on form submission success
   useEffect(() => {
-    success.state &&
+    if (success.state) {
+      setIsLoading(false)
       setTimeout(() => history.push(`/polls/${success.id}`), 4000)
-  }, [success, history])
+    }
+  }, [success, isLoading, history])
 
   // Render
   return (
-    <Form onSubmit={handleSubmit} noValidate>
-      <Fieldset>
-        <Legend>Create New Poll</Legend>
-        {(errors.api && <MessageBlock type="error" message={errors.api} />) ||
-          (success.state && (
-            <MessageBlock type="success" message={success.message} />
-          ))}
+    <>
+      {isLoading ? (
+        <>
+          <Heading>Creating poll....</Heading>
+          <img src={loadingSpinner} alt="loading spninner" />
+        </>
+      ) : (
+        <Form onSubmit={handleSubmit} noValidate>
+          <Fieldset>
+            <Legend>Create New Poll</Legend>
+            {(errors.api && (
+              <MessageBlock type="error" message={errors.api} />
+            )) ||
+              (success.state && (
+                <MessageBlock
+                  type="success"
+                  message={`${success.message}. Redirecting shortly...`}
+                />
+              ))}
 
-        <FormInput
-          id="question"
-          name="question"
-          label={t('Question')}
-          value={question}
-          onChange={handleInputChange}
-          required
-        />
-        {errors.question && <InputError errorMessage={errors.question} />}
+            <FormInput
+              id="question"
+              name="question"
+              label={t('Question')}
+              value={question}
+              onChange={handleInputChange}
+              required
+            />
+            {errors.question && <InputError errorMessage={errors.question} />}
 
-        <Dropdown
-          id="channel"
-          label={t('Channels')}
-          placeholder={t('Select a channel')}
-          value={channel ? channel : 'default'}
-          onChange={handleInputChange}
-        >
-          <DropdownList list={channels} />
-        </Dropdown>
-        {errors.channel && <InputError errorMessage={errors.channel} />}
+            <Dropdown
+              id="channel"
+              label={t('Channels')}
+              placeholder={t('Select a channel')}
+              value={channel ? channel : 'default'}
+              onChange={handleInputChange}
+            >
+              <DropdownList list={channels} />
+            </Dropdown>
+            {errors.channel && <InputError errorMessage={errors.channel} />}
 
-        <FormButton
-          type="submit"
-          onClick={handleSubmit}
-          disabled={success.state}
-        >
-          Submit Poll
-        </FormButton>
-      </Fieldset>
-    </Form>
+            <FormButton
+              type="submit"
+              onClick={handleSubmit}
+              disabled={success.state}
+            >
+              Submit Poll
+            </FormButton>
+          </Fieldset>
+        </Form>
+      )}
+    </>
   )
 }
 
