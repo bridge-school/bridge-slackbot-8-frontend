@@ -12,6 +12,6 @@ export const Legend = styled.legend.attrs({
   className: `f2 lh-title fw9 ph0 mt0 mb3 grey dark-gray`
 })``
 
-export const Heading = styled.h1.attrs({
-  className: `f2 lh-title fw9 mb3 mt0 bw2 dark-gray`
+export const LoadingMessage = styled.h1.attrs({
+  className: `fw6 f5`
 })``

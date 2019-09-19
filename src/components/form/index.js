@@ -9,7 +9,7 @@ import FormInput from '../form-input'
 import FormButton from '../button'
 import Dropdown from '../dropdown'
 import { InputError, MessageBlock } from '../message-blocks'
-import { Form, Legend, Fieldset, Heading } from './style'
+import { Form, Legend, Fieldset, LoadingMessage } from './style'
 import loadingSpinner from '../../assets/loadingSpinner.svg'
 
 // New poll request
@@ -100,58 +100,54 @@ const PollForm = ({ t, channels, apiError, history }) => {
 
   // Render
   return (
-    <>
+    <Form onSubmit={handleSubmit} noValidate>
+      <Legend>Create New Poll</Legend>
       {isLoading ? (
         <>
-          <Heading>Creating poll....</Heading>
+          <LoadingMessage>Creating poll...</LoadingMessage>
           <img src={loadingSpinner} alt="loading spninner" />
         </>
       ) : (
-        <Form onSubmit={handleSubmit} noValidate>
-          <Fieldset>
-            <Legend>Create New Poll</Legend>
-            {(errors.api && (
-              <MessageBlock type="error" message={errors.api} />
-            )) ||
-              (success.state && (
-                <MessageBlock
-                  type="success"
-                  message={`${success.message}. Redirecting shortly...`}
-                />
-              ))}
+        <Fieldset>
+          {(errors.api && <MessageBlock type="error" message={errors.api} />) ||
+            (success.state && (
+              <MessageBlock
+                type="success"
+                message={`${success.message}. Redirecting shortly...`}
+              />
+            ))}
 
-            <FormInput
-              id="question"
-              name="question"
-              label={t('Question')}
-              value={question}
-              onChange={handleInputChange}
-              required
-            />
-            {errors.question && <InputError errorMessage={errors.question} />}
+          <FormInput
+            id="question"
+            name="question"
+            label={t('Question')}
+            value={question}
+            onChange={handleInputChange}
+            required
+          />
+          {errors.question && <InputError errorMessage={errors.question} />}
 
-            <Dropdown
-              id="channel"
-              label={t('Channels')}
-              placeholder={t('Select a channel')}
-              value={channel ? channel : 'default'}
-              onChange={handleInputChange}
-            >
-              <DropdownList list={channels} />
-            </Dropdown>
-            {errors.channel && <InputError errorMessage={errors.channel} />}
+          <Dropdown
+            id="channel"
+            label={t('Channels')}
+            placeholder={t('Select a channel')}
+            value={channel ? channel : 'default'}
+            onChange={handleInputChange}
+          >
+            <DropdownList list={channels} />
+          </Dropdown>
+          {errors.channel && <InputError errorMessage={errors.channel} />}
 
-            <FormButton
-              type="submit"
-              onClick={handleSubmit}
-              disabled={success.state}
-            >
-              Submit Poll
-            </FormButton>
-          </Fieldset>
-        </Form>
+          <FormButton
+            type="submit"
+            onClick={handleSubmit}
+            disabled={success.state}
+          >
+            Submit Poll
+          </FormButton>
+        </Fieldset>
       )}
-    </>
+    </Form>
   )
 }
 
