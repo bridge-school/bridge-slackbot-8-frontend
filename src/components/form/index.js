@@ -60,9 +60,9 @@ const PollForm = ({ t, channels, apiError, history }) => {
   }
 
   // Handle submit
-  const handleSubmit = async event => {
+  const handleSubmit = event => {
     event.preventDefault()
-    const isNull = await nullCheck(t, { question, channel })
+    const isNull = nullCheck(t, { question, channel })
 
     try {
       if (validateForm(isNull)) {
