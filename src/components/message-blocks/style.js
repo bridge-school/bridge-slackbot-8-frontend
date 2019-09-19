@@ -17,7 +17,7 @@ export const MessageContainer = styled.div.attrs(({ type }) => {
 
   return {
     style: { background, borderColor },
-    className: `w-100 mb4 pa3 br2 ba bw1 f4 flex flex-column justify-center items-center ${
+    className: `w-100 mv4 pa3 br2 ba bw1 f4 flex flex-column justify-center items-center ${
       type === 'error' ? 'dark-red' : 'green'
     }`
   }

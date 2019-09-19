@@ -108,7 +108,7 @@ const PollForm = ({ t, channels, apiError, history }) => {
           <img src={loadingSpinner} alt="loading spninner" />
         </>
       ) : (
-        <Fieldset>
+        <>
           {(errors.api && <MessageBlock type="error" message={errors.api} />) ||
             (success.state && (
               <MessageBlock
@@ -117,37 +117,37 @@ const PollForm = ({ t, channels, apiError, history }) => {
               />
             ))}
 
-          <FormInput
-            id="question"
-            name="question"
-            label={t('Question')}
-            value={question}
-            hasError={errors.question}
-            onChange={handleInputChange}
-            required
-          />
-          {errors.question && <InputError errorMessage={errors.question} />}
+          {!success.state && (
+            <Fieldset>
+              <FormInput
+                id="question"
+                name="question"
+                label={t('Question')}
+                value={question}
+                hasError={errors.question}
+                onChange={handleInputChange}
+                required
+              />
+              {errors.question && <InputError errorMessage={errors.question} />}
 
-          <Dropdown
-            id="channel"
-            label={t('Channels')}
-            placeholder={t('Select a channel')}
-            value={channel ? channel : 'default'}
-            hasError={errors.channel}
-            onChange={handleInputChange}
-          >
-            <DropdownList list={channels} />
-          </Dropdown>
-          {errors.channel && <InputError errorMessage={errors.channel} />}
+              <Dropdown
+                id="channel"
+                label={t('Channels')}
+                placeholder={t('Select a channel')}
+                value={channel ? channel : 'default'}
+                hasError={errors.channel}
+                onChange={handleInputChange}
+              >
+                <DropdownList list={channels} />
+              </Dropdown>
+              {errors.channel && <InputError errorMessage={errors.channel} />}
 
-          <FormButton
-            type="submit"
-            onClick={handleSubmit}
-            disabled={success.state}
-          >
-            Submit Poll
-          </FormButton>
-        </Fieldset>
+              <FormButton type="submit" onClick={handleSubmit}>
+                Submit Poll
+              </FormButton>
+            </Fieldset>
+          )}
+        </>
       )}
     </Form>
   )
