@@ -10,5 +10,6 @@ export const request = (endpoint, method = 'GET', body) =>
       'content-type': 'application/json',
       method,
       body
-    }
+    },
+    body: JSON.stringify(body)
   })

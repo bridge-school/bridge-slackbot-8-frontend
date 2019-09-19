@@ -1,7 +1,7 @@
 import { actions } from '../constants'
 
-const requestInitialState = { channels: [], isLoading: true }
-const requestsReducer = (state = requestInitialState, action) => {
+const channelsInitialState = { channels: [], isLoading: true }
+const channelsReducer = (state = channelsInitialState, action) => {
   const { type, payload } = action
 
   switch (type) {
@@ -16,4 +16,4 @@ const requestsReducer = (state = requestInitialState, action) => {
   }
 }
 
-export default requestsReducer
+export default channelsReducer

@@ -1,120 +1,105 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
+import { withRouter } from 'react-router-dom'
 import { withTranslation } from 'react-i18next'
 import { connect } from 'react-redux'
+import { request } from '../../backend-request'
 
 import FormInput from '../form-input'
 import FormButton from '../button'
 import Dropdown from '../dropdown'
-import InputError from '../input-error'
 import { Form, Legend, Fieldset } from './style'
 
-const validateForm = errors => {
-  let valid = true
-  Object.values(errors).forEach(val => {
-    val.length > 0 && (valid = false)
-  })
-  return valid
+const sendPoll = (data, callback) => {
+  const formSubmit = async () => {
+    return await request('polls', 'POST', data)
+  }
+  formSubmit()
+    .then(res => res.json())
+    .then(data => callback(data.id))
+    .catch(error => console.log(error))
 }
 
-const sendPoll = () => fetch('http://localhost:8081/poll', { method: 'POST' })
+const PollForm = ({ t, channels, history }) => {
+  const [question, setQuestion] = useState('')
+  const [channel, setChannel] = useState(null)
+  const [pollId, setPollId] = useState('')
 
-class PollForm extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      question: '',
-      channel: null,
-      errors: {
-        question: ''
-      }
-    }
-
-    this.handleInputChange = this.handleInputChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
-  }
-
-  handleInputChange(event) {
+  // Handle input change
+  const handleInputChange = event => {
     const { value, id } = event.target
 
-    this.setState({
-      [id]: value,
-      errors: { ...this.state.errors, [id]: '' }
-    })
-  }
+    if (id === 'question') {
+      setQuestion(value)
+    } else if (id === 'channel') {
+      // Map channel id to selected value
+      const channelId = channels
+        .filter(({ name }) => name === value)
+        .map(({ id }) => id)[0]
 
-  async handleSubmit(event) {
-    event.preventDefault()
-
-    const { question, errors } = this.state
-    const { t } = this.props
-
-    const questionError = t('Question is required')
-
-    await (question.length === 0 &&
-      this.setState({
-        errors: { ...errors, question: questionError }
-      }))
-
-    try {
-      validateForm(this.state.errors)
-        ? // turn to if/else caus we need to send the poll and clear the form
-          console.log('form valid')
-        : console.log('form invalid')
-
-      sendPoll()
-
-      // clear the field on submit
-      this.setState({ question: '' })
-    } catch (error) {
-      console.log(error)
+      setChannel({ id: channelId, name: value })
     }
   }
 
-  render() {
-    const { t } = this.props
-    const { question, errors } = this.state
-    return (
-      <Form onSubmit={this.handleSubmit} noValidate>
-        <Fieldset>
-          <Legend>Create New Poll</Legend>
-          <FormInput
-            id="question"
-            name="question"
-            label={t('Question')}
-            value={question}
-            onChange={this.handleInputChange}
-            required
-          />
-          <Dropdown
-            id="channel"
-            label={t('User Group')}
-            placeholder={t('Select a channel')}
-            value={this.state.selected}
-            onChange={this.handleInputChange}
-          >
-            {this.props.channels.map(({ id, name, option }) => (
-              <Dropdown.Option key={id} id={name}>
-                {option}
-              </Dropdown.Option>
-            ))}
-          </Dropdown>
-          {errors.question.length > 0 && (
-            <InputError errorMessage={errors.question} />
-          )}
-          <FormButton type="submit" onClick={this.handleSubmit}>
-            Submit Poll
-          </FormButton>
-        </Fieldset>
-      </Form>
-    )
+  // Handle submit
+  const handleSubmit = async event => {
+    event.preventDefault()
+    const query = {
+      question,
+      channel_name: channel.name,
+      channel_id: channel.id
+    }
+    await sendPoll(query, setPollId)
+
+    // Clear the field on submit
+    setQuestion('')
+    setChannel(null)
   }
+
+  // Use hook to replace componentWillReceiveProps
+  // Redirect user once poll id is set
+  // TODO: display toast message for 5 seconds
+  useEffect(() => {
+    pollId && history.push(`/polls/${pollId}`)
+  }, [pollId, history])
+
+  // Render
+  return (
+    <Form onSubmit={handleSubmit} noValidate>
+      <Fieldset>
+        <Legend>Create New Poll</Legend>
+        <FormInput
+          id="question"
+          name="question"
+          label={t('Question')}
+          value={question}
+          onChange={handleInputChange}
+          required
+        />
+        <Dropdown
+          id="channel"
+          label={t('User Group')}
+          placeholder={t('Select a channel')}
+          value={channel}
+          onChange={handleInputChange}
+        >
+          {channels.map(({ id, name, option }) => (
+            <Dropdown.Option key={id} id={name}>
+              {option}
+            </Dropdown.Option>
+          ))}
+        </Dropdown>
+        <FormButton type="submit" onClick={handleSubmit}>
+          Submit Poll
+        </FormButton>
+      </Fieldset>
+    </Form>
+  )
 }
 
 const mapStateToProps = state => ({
-  channels: state.requestsReducer.channels
+  channels: state.channelsReducer.channels
 })
 
-const PollFormContainer = connect(mapStateToProps)(PollForm)
+const PollFormContainer = connect(mapStateToProps)(withRouter(PollForm))
 
 export default withTranslation()(PollFormContainer)
