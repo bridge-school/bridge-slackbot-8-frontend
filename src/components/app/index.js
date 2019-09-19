@@ -34,9 +34,7 @@ function App({ fetchChannels }) {
   )
 }
 
-const mapStateToProps = state => ({
-  channels: state.channelsReducer.channels
-})
+const mapStateToProps = state => ({ ...state })
 
 const mapDispatchToProps = {
   fetchChannels
