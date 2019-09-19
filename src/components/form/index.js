@@ -13,7 +13,7 @@ import { Form, Legend, Fieldset, LoadingMessage } from './style'
 import loadingSpinner from '../../assets/loadingSpinner.svg'
 
 // New poll request
-const sendPoll = (data, loading, errors, callback) => {
+const sendPoll = (data, loading, errors, success) => {
   loading(true)
 
   const formSubmit = async () => {
@@ -21,7 +21,7 @@ const sendPoll = (data, loading, errors, callback) => {
   }
   formSubmit()
     .then(res => res.json())
-    .then(data => callback({ state: true, ...data }))
+    .then(data => success({ state: true, ...data }))
     .catch(error => errors({ api: error }))
 }
 
