@@ -5,11 +5,14 @@ import loadingSpinner from '../../assets/loadingSpinner.svg'
 import { Polls, H2, PollList, Poll, Question, Channel, Alert } from './style'
 
 const pollsInfo = data => {
-  return data.map(({ question, channel: { name }, id }) => ({
-    question: question,
-    name: name,
-    id
-  }))
+  // Sort in descending order by date created
+  return data
+    .sort((a, b) => (a.created_at > b.created_at ? -1 : 1))
+    .map(({ question, channel: { name }, id }) => ({
+      question: question,
+      name: name,
+      id
+    }))
 }
 
 class SubmittedPolls extends Component {
