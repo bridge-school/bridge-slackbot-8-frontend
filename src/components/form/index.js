@@ -86,7 +86,7 @@ const PollForm = ({ t, channels, apiError, history }) => {
   useEffect(() => {
     if (success.state) {
       setIsLoading(false)
-      setTimeout(() => history.push(`/polls/${success.id}`), 5000)
+      setTimeout(() => history.push('/'), 5000)
     } else if (apiError) {
       setErrors({ api: apiError })
     }
@@ -108,7 +108,7 @@ const PollForm = ({ t, channels, apiError, history }) => {
           {!errors.api && success.state ? (
             <MessageBlock
               type="success"
-              message={`${success.message}. Redirecting to poll page...`}
+              message={`${success.message}. Redirecting to polls list...`}
             />
           ) : (
             <Fieldset>
