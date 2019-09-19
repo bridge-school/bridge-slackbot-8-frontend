@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const Label = styled.label.attrs({
-  className: `f4 b db mb2 mid-gray`
+  className: `f3 b db mb2 mid-gray`
 })`
   ::after {
     content: '▼';
@@ -14,11 +14,19 @@ export const Label = styled.label.attrs({
 `
 
 export const Select = styled.div.attrs({
-  className: `mb4 relative`
+  className: `relative`
 })``
 
-export const OptionList = styled.select.attrs({
-  className: `ba br2 bw1 pa2 mb2 db w-100 f4 b--black-20 input-reset`
+export const OptionList = styled.select.attrs(({ currentValue, hasError }) => {
+  const conditionalClasses = hasError
+    ? 'b--dark-red dark-red'
+    : currentValue === 'default'
+    ? 'b--black-20 black-60'
+    : 'b--black-20 black'
+
+  return {
+    className: `ba br2 bw1 pa2 mb3 db w-100 f4 input-reset ${conditionalClasses}`
+  }
 })``
 
 export const Option = styled.option.attrs({

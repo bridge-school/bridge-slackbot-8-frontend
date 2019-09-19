@@ -3,11 +3,19 @@ import { Label, Select, OptionList, Option } from './style'
 
 // Let the parent control the dropdown state
 // We'll pass up our intended changes to the parent
-const Dropdown = ({ id, label, selected, placeholder, children, ...props }) => (
+const Dropdown = ({
+  id,
+  label,
+  value,
+  placeholder,
+  hasError,
+  children,
+  ...props
+}) => (
   <Select {...props}>
     <Label htmlFor={id}>{label}</Label>
-    <OptionList id={id}>
-      <Option value="" selected={!props.value} disabled>
+    <OptionList currentValue={value} hasError={hasError} id={id}>
+      <Option value="default" hidden>
         {placeholder}
       </Option>
       {children}

@@ -5,6 +5,11 @@ const setChannels = channels => ({
   payload: { channels }
 })
 
+const setErrors = errors => ({
+  type: actions.SET_ERRORS,
+  payload: { errors }
+})
+
 export const fetchChannels = response => dispatch => {
   response()
     .then(res => res.json())
@@ -16,7 +21,5 @@ export const fetchChannels = response => dispatch => {
         .map(channel => ({ ...channel, option: `#${channel.name}` }))
     )
     .then(data => dispatch(setChannels(data)))
-    .catch(error => console.log(error))
-
-  // TODO: create an action handler for error handling and replace console log
+    .catch(error => dispatch(setErrors(error)))
 }

@@ -1,6 +1,6 @@
 import { actions } from '../constants'
 
-const channelsInitialState = { channels: [], isLoading: true }
+const channelsInitialState = { channels: [] }
 const channelsReducer = (state = channelsInitialState, action) => {
   const { type, payload } = action
 
@@ -8,8 +8,7 @@ const channelsReducer = (state = channelsInitialState, action) => {
     case actions.SET_CHANNELS:
       return {
         ...state,
-        channels: payload.channels,
-        isLoading: payload.isLoading
+        channels: payload.channels
       }
     default:
       return state

@@ -5,7 +5,7 @@ export const ResultContainer = styled.div.attrs({
 })``
 
 export const Heading = styled.h1.attrs({
-  className: `f2 lh-title fw9 mb3 mt0 pt3 bw2 dark-gray`
+  className: `f2 lh-title fw9 mb3 mt0 bw2 dark-gray`
 })``
 
 export const QuestionText = styled.p.attrs({
